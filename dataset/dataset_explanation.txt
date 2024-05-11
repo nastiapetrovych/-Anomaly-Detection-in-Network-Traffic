@@ -1,0 +1,46 @@
+"""
+Information according dataset columns
+"""
+
+1. duration: Length of the connection in seconds.
+2. protocol_type: Type of protocol, such as TCP, UDP, etc.
+3. service: Network service on the destination, like http, telnet, etc.
+4. flag: Status of the connection, such as S0 (connection attempt seen, no reply), S1 (connection established, not terminated), etc.
+5. src_bytes: Number of data bytes transferred from source to destination.
+6. dst_bytes: Number of data bytes transferred from destination to source.
+7. land: Binary flag indicating whether the source and destination IPs and ports are the same.
+8. wrong_fragment: Number of "wrong" fragments in the connection.
+9. urgent: Number of urgent packets in the connection (packets with the urgent flag set).
+10. hot: Number of "hot" indicators in the connection (e.g., entering a system directory).
+11. num_failed_logins: Number of failed login attempts.
+12. logged_in: Binary flag indicating whether the login was successful.
+13. num_compromised: Number of "compromised" conditions in the connection.
+14. root_shell: Binary flag indicating whether a root shell was obtained.
+15. su_attempted: Number of times the "su root" command was attempted.
+16. num_root: Number of root accesses.
+17. num_file_creations: Number of file creation operations.
+18. num_shells: Number of shell prompts.
+19. num_access_files: Number of operations accessing control files.
+20. num_outbound_cmds: Number of outbound commands in an FTP session.
+21. is_host_login: Binary flag indicating if the login belongs to the "host" list.
+22. is_guest_login: Binary flag indicating if the login is a "guest" login.
+23. count: Number of connections to the same host as the current connection in the past two seconds.
+24. srv_count: Number of connections to the same service as the current connection in the past two seconds.
+25. serror_rate: Percentage of connections that have "SYN" errors.
+26. srv_serror_rate: Percentage of connections that have "SYN" errors to the same service.
+27. rerror_rate: Percentage of connections that have "REJ" errors.
+28. srv_rerror_rate: Percentage of connections that have "REJ" errors to the same service.
+29. same_srv_rate: Percentage of connections to the same service.
+30. diff_srv_rate: Percentage of connections to different services.
+31. srv_diff_host_rate: Percentage of connections to different hosts.
+32. dst_host_count: Number of connections to the same destination host.
+33. dst_host_srv_count: Number of connections to the same service on the destination host.
+34. dst_host_same_srv_rate: Percentage of connections to the same service on the destination host.
+35. dst_host_diff_srv_rate: Percentage of different services on the destination host.
+36. dst_host_same_src_port_rate: Percentage of connections to the same source port on the destination host.
+37. dst_host_srv_diff_host_rate: Percentage of different hosts for the same service on the destination host.
+38. dst_host_serror_rate: Percentage of connections that have "SYN" errors on the destination host.
+39. dst_host_srv_serror_rate: Percentage of connections that have "SYN" errors to the same service on the destination host.
+40. dst_host_rerror_rate: Percentage of connections that have "REJ" errors on the destination host.
+41. dst_host_srv_rerror_rate: Percentage of connections that have "REJ" errors to the same service on the destination host.
+42. class: Target variable indicating whether the instance is normal or an attack.
