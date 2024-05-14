@@ -21,13 +21,13 @@ class DataPreprocessor:
     def get_important_features(self):
         # Label Encoding for categorical features
         label_encoders = {}
-        for column in self.data.columns:
+        for column in self.features.columns:
             if self.data[column].dtype == 'object':
                 le = LabelEncoder()
-                self.data[column] = le.fit_transform(self.data[column])
+                self.features[column] = le.fit_transform(self.features[column])  # Update self.features directly
                 label_encoders[column] = le
 
-        # Calculate mutual information
+        # Calculate mutual information after all categorical features are encoded
         mi_scores = mutual_info_classif(self.features, self.target, discrete_features='auto')
 
         # Calculate target entropy
@@ -48,8 +48,8 @@ class DataPreprocessor:
             'Information Gain Ratio': information_gain_ratio
         })
 
-        ig_df.sort_values(by='Information Gain Ratio', ascending=False)
-        return ig_df
+        return ig_df.sort_values(by='Information Gain Ratio', ascending=False)
+
 
     def calculate_entropy(self, feature):
         _, counts = np.unique(feature, return_counts=True)
