@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.mixture import GaussianMixture
 import numpy as np
+from gmm_own import CustomGaussianMixture
 
 preprocessor = DataPreprocessor('../dataset/Train_data.csv')
 
@@ -23,14 +24,21 @@ accuracies = []
 n_components = 7
 pt = 46
 
-range_limit = 90
+range_limit = 20
 
 for i in range(1, range_limit):
-    gmm = GaussianMixture(n_components=n_components, covariance_type='full', random_state=42)
-    gmm.fit(X_train[y_train == 0]) 
-    log_probs = gmm.score_samples(X_test)
-    threshold = np.percentile(log_probs, i)
-    predictions = log_probs < threshold
+    gmm_normal = CustomGaussianMixture(n_components=i, random_state=42)
+    gmm_normal.fit(X_train[y_train == 0])
+
+    log_probs_normal = gmm_normal.score_samples(X_test)
+
+
+    gmm_anomaly = CustomGaussianMixture(n_components=i, random_state=42)
+    gmm_anomaly.fit(X_train[y_train == 1])
+
+    log_probs_anomaly = gmm_anomaly.score_samples(X_test)
+
+    predictions = log_probs_normal < log_probs_anomaly
 
     report = classification_report(y_test, predictions, output_dict=True)
     normal_precisions.append(report['0']['precision'])

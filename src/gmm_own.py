@@ -105,8 +105,6 @@ class CustomGaussianMixture:
     
 
 
-
-
 class SimpleCustomGaussianMixture:
     def __init__(self, n_components=1, max_iter=100, tol=1e-3, random_state=None, reg_covar=1e-6):
         self.n_components = n_components
@@ -182,24 +180,18 @@ X_preprocessed = preprocessor.get_preprocessed_data()
 y = preprocessor.target.apply(lambda x: 0 if x == 'normal' else 1)
 X_train, X_test, y_train, y_test = train_test_split(X_preprocessed, y, test_size=0.3, random_state=42)
 
-# gmm = CustomGaussianMixture(n_components=10, random_state=42)
-# gmm.fit(X_train[y_train == 0])
+gmm_normal = CustomGaussianMixture(n_components=4, random_state=42)
+gmm_normal.fit(X_train[y_train == 0])
 
-# log_probs = gmm.score_samples(X_test)
-# threshold = np.percentile(log_probs, 46)
-# predictions = log_probs < threshold
-
-# print(classification_report(y_test, predictions.astype(int)))
-# print(confusion_matrix(y_test, predictions.astype(int)))
+log_probs_normal = gmm_normal.score_samples(X_test)
 
 
+gmm_anomaly = CustomGaussianMixture(n_components=4, random_state=42)
+gmm_anomaly.fit(X_train[y_train == 1])
 
-gmm = CustomGaussianMixture(n_components=10, random_state=42)
-gmm.fit(X_train[y_train == 1])
+log_probs_anomaly = gmm_anomaly.score_samples(X_test)
 
-log_probs = gmm.score_samples(X_test)
-threshold = np.percentile(log_probs, 46)
-predictions = log_probs > threshold
+predictions = log_probs_normal < log_probs_anomaly
 
 print(classification_report(y_test, predictions.astype(int)))
 print(confusion_matrix(y_test, predictions.astype(int)))
