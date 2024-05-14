@@ -2,14 +2,12 @@ import numpy as np
 from scipy.stats import multivariate_normal
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
-
-import numpy as np
-from scipy.stats import multivariate_normal
-from sklearn.cluster import KMeans
-
 import pandas as pd
 from data_preparation import DataPreprocessor
-from sklearn.model_selection import train_test_split
+
+
+
+
 class CustomKMeans:
     def __init__(self, n_clusters=2, max_iter=300, tol=1e-4, random_state=None):
         self.n_clusters = n_clusters
@@ -123,10 +121,8 @@ class SimpleCustomGaussianMixture:
 
     def fit(self, X):
         n_samples, n_features = X.shape
-        # Ensure data does not contain infinite or NaN values
         X = np.nan_to_num(X)
         
-        # Robust initialization of parameters
         indices = np.random.choice(n_samples, self.n_components, replace=False)
         self.means_ = X[indices]
         self.weights_ = np.full(self.n_components, 1 / self.n_components)
@@ -141,7 +137,6 @@ class SimpleCustomGaussianMixture:
                 self.converged_ = True
                 break
             log_likelihood_old = log_likelihood_new
-            # print(f"Iteration {i}, Log Likelihood: {log_likelihood_new}")
 
     def _e_step(self, X):
         log_probs = np.zeros((X.shape[0], self.n_components))
@@ -171,7 +166,6 @@ class SimpleCustomGaussianMixture:
             log_likelihood += np.sum(np.log(np.maximum(likelihood_contrib, 1e-32)))
         return log_likelihood
     def score_samples(self, X):
-        """Calculate the weighted log probabilities for each sample in X under the model."""
         log_probs = np.zeros((X.shape[0], self.n_components))
         for j in range(self.n_components):
             log_probs[:, j] = multivariate_normal(self.means_[j], self.covariances_[j], allow_singular=True).logpdf(X)
@@ -188,12 +182,24 @@ X_preprocessed = preprocessor.get_preprocessed_data()
 y = preprocessor.target.apply(lambda x: 0 if x == 'normal' else 1)
 X_train, X_test, y_train, y_test = train_test_split(X_preprocessed, y, test_size=0.3, random_state=42)
 
-gmm = SimpleCustomGaussianMixture(n_components=10, random_state=42)
-gmm.fit(X_train[y_train == 0])
+# gmm = CustomGaussianMixture(n_components=10, random_state=42)
+# gmm.fit(X_train[y_train == 0])
+
+# log_probs = gmm.score_samples(X_test)
+# threshold = np.percentile(log_probs, 46)
+# predictions = log_probs < threshold
+
+# print(classification_report(y_test, predictions.astype(int)))
+# print(confusion_matrix(y_test, predictions.astype(int)))
+
+
+
+gmm = CustomGaussianMixture(n_components=10, random_state=42)
+gmm.fit(X_train[y_train == 1])
 
 log_probs = gmm.score_samples(X_test)
 threshold = np.percentile(log_probs, 46)
-predictions = log_probs < threshold
+predictions = log_probs > threshold
 
 print(classification_report(y_test, predictions.astype(int)))
 print(confusion_matrix(y_test, predictions.astype(int)))
