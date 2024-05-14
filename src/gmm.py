@@ -16,7 +16,6 @@ n_components = 6
 # A sigt bias to type 1 error for better result for anomaly detection
 percentile_threshold = 46
 
-
 gmm = GaussianMixture(n_components=10, covariance_type='full', random_state=42)
 gmm.fit(X_train[y_train == 0]) 
 
